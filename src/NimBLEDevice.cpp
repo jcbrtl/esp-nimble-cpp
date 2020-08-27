@@ -53,6 +53,8 @@ bool            NimBLEDevice::m_synced = false;
 NimBLEAdvertising* NimBLEDevice::m_bleAdvertising = nullptr;
 #endif
 
+NimBLEMeshNode*  NimBLEDevice::m_pMeshNode = nullptr;
+
 gap_event_handler           NimBLEDevice::m_customGapHandler = nullptr;
 ble_gap_event_listener      NimBLEDevice::m_listener;
 #if defined( CONFIG_BT_NIMBLE_ROLE_CENTRAL)
@@ -60,6 +62,30 @@ std::list <NimBLEClient*>   NimBLEDevice::m_cList;
 #endif
 std::list <NimBLEAddress>   NimBLEDevice::m_ignoreList;
 NimBLESecurityCallbacks*    NimBLEDevice::m_securityCallbacks = nullptr;
+
+
+/**
+ * @brief Create a new mesh node.
+ * @param [in] uuid The uuid to advertise before being provisioned.
+ * @param [in] type A bitmask of the node type to create.
+ * @return A point to new instance of the mesh node.
+ */
+NimBLEMeshNode* NimBLEDevice::createMeshNode(NimBLEUUID uuid, uint8_t type) {
+    if(m_pMeshNode == nullptr) {
+        m_pMeshNode = new NimBLEMeshNode(uuid, type);
+    }
+
+    return m_pMeshNode;
+}
+
+
+/**
+ * @brief Get the mesh node instance.
+ * @return a pointer to the mesh node instance or nullptr if no node exists.
+ */
+NimBLEMeshNode* NimBLEDevice::getMeshNode() {
+    return m_pMeshNode;
+}
 
 
 /**
